@@ -35,7 +35,10 @@ class RedisCacheService extends ICacheService {
   async updateFields(key, value, where) {
     try {
       const existingValue = await this.get(key);
-      if (!existingValue) throw new Error('Key does not exist.');
+      if (!existingValue) {
+        console.warn(`Cache key not found: ${key}, skipping update.`);
+        return;
+      }
 
       const jsonValue = JSON.parse(existingValue);
 
